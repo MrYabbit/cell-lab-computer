@@ -1,0 +1,5 @@
+# npm staff
+node_modules/
+
+# JetBrains .idea
+.idea/
