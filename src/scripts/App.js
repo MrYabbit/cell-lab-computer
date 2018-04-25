@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {persistor, store} from "./store";
 import {PersistGate} from "redux-persist/es/integration/react";
 import {Provider} from "react-redux";
+import { PlayerBadge } from "./containers/PlayerBadge";
 
 import logo from '../logo.svg';
 import '../styles/App.css';
@@ -30,6 +31,7 @@ class App extends Component {
                             <img src={logo} className="App-logo" alt="logo"/>
                             <h1 className="App-title">Welcome to React</h1>
                         </header>
+                        <PlayerBadge></PlayerBadge>
                     </PersistGate>
                 </Provider>
             </div>
