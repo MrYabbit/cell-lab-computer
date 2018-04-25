@@ -51,7 +51,11 @@ export class PlayerBadge extends  Component {
 
     render () {
         if (this.state.editable) {
-            return <PlayerBadgeEdditable username={this.props.username} changeUsername={(username) => {this.props.changeUsername(username); this.disableEditing();}}/> // since PlayerBadgeEditable hasn't its own container we have to pass everything
+            return <PlayerBadgeEdditable username={this.props.username} changeUsername={
+                        (username) => {
+                            this.props.changeUsername(username); this.disableEditing();
+                        }
+                    }/> // since PlayerBadgeEditable hasn't its own container we have to pass everything
         } else {
             return <p onClick={this.allowEditing}>Username: {this.props.username}</p>
         }
