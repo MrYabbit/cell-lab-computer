@@ -1,0 +1,2 @@
+# containers folder
+All containers will be in this folder. Containers wrap components that want to interact with redux storage so they can easily create actions or have hooks for re-rendering after change.
