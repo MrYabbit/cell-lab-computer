@@ -13,7 +13,7 @@ class App extends Component {
             // here set default state values for this component
         };
         store.subscribe(() => {
-            // This function will be run after every change of storage and should change state using self.setState() appropriately.
+            // This function will be run after every change of storage and should change state using self.seState() appropriately.
         });
     }
 
