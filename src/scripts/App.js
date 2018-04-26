@@ -3,6 +3,7 @@ import {persistor, store} from "./store";
 import {PersistGate} from "redux-persist/es/integration/react";
 import {Provider} from "react-redux";
 import { PlayerBadge } from "./containers/PlayerBadge";
+import {Renderer} from "./containers/Renderer";
 
 import logo from '../logo.svg';
 import '../styles/App.css';
@@ -27,11 +28,8 @@ class App extends Component {
                     <PersistGate
                         loading={<span>Mutating Cells ...</span>} // This component will be shown until redux-persistors restores storage
                         persistor={persistor}>
-                        <header className="App-header">
-                            <img src={logo} className="App-logo" alt="logo"/>
-                            <h1 className="App-title">Welcome to React</h1>
-                        </header>
-                        <PlayerBadge></PlayerBadge>
+                        <PlayerBadge/>
+                        <Renderer/>
                     </PersistGate>
                 </Provider>
             </div>
