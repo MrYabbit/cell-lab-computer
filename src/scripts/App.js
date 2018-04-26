@@ -4,6 +4,7 @@ import {PersistGate} from "redux-persist/es/integration/react";
 import {Provider} from "react-redux";
 import { PlayerBadge } from "./containers/PlayerBadge";
 import {Renderer} from "./containers/Renderer";
+import {LoadingAnimation} from "./components/LoadingAnimation";
 
 import logo from '../logo.svg';
 import '../styles/App.css';
@@ -26,7 +27,7 @@ class App extends Component {
             <div className="App">
                 <Provider store={store}>
                     <PersistGate
-                        loading={<span>Mutating Cells ...</span>} // This component will be shown until redux-persistors restores storage
+                        loading={<LoadingAnimation/>} // This component will be shown until redux-persistors restores storage
                         persistor={persistor}>
                         <PlayerBadge/>
                         <Renderer/>
