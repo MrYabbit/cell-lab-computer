@@ -29,7 +29,6 @@ class App extends Component {
                     <PersistGate
                         loading={<LoadingAnimation/>} // This component will be shown until redux-persistors restores storage
                         persistor={persistor}>
-                        <PlayerBadge/>
                         <Renderer/>
                     </PersistGate>
                 </Provider>
