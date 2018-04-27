@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {persistor, store} from "./store";
 import {PersistGate} from "redux-persist/es/integration/react";
 import {Provider} from "react-redux";
-import { PlayerBadge } from "./containers/PlayerBadge";
+import {PlayerBadge} from "./containers/PlayerBadge";
 import {Simulation} from "./containers/Simulation";
 import {LoadingAnimation} from "./components/LoadingAnimation";
 
@@ -21,13 +21,13 @@ class App extends Component {
     }
 
 
-
     render() {
         return (
             <div className="App">
                 <Provider store={store}>
                     <PersistGate
-                        loading={<LoadingAnimation/>} // This component will be shown until redux-persist restores storage
+                        loading={
+                            <LoadingAnimation/>} // This component will be shown until redux-persist restores storage
                         persistor={persistor}>
                         <Simulation/>
                     </PersistGate>

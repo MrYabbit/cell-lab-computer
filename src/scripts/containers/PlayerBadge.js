@@ -1,5 +1,5 @@
 import * as actions from "../actions";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import * as components from "../components/PlayerBadge";
 
 export const PlayerBadge = connect(

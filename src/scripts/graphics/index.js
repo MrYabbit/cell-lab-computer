@@ -1,8 +1,10 @@
+import * as config from "../../config/graphics";
 
 export default class Graphics {
-    constructor (canvas) {
+    constructor(canvas) {
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
+        this.config = config;
         this.clear();
 
         this.colors = {
@@ -16,7 +18,7 @@ export default class Graphics {
 
     draw_circle(x, y, radius, color) {
         this.ctx.beginPath();
-        this.ctx.arc(x, y, radius, 0, 2*Math.PI);
+        this.ctx.arc(x, y, radius, 0, 2 * Math.PI);
         this.ctx.fillStyle = color;
         this.ctx.fill();
     }
@@ -31,6 +33,7 @@ export default class Graphics {
     }
 
     clear() {
-        this.ctx.clearRect(0, 0, this.ctx.width, this.ctx.height);
+        this.ctx.fillStyle = this.config.BACKGROUND_COLOR;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
