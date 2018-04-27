@@ -19,7 +19,7 @@ export default class Cell extends Sprite {
     }
 
     starve(coef) {
-        this.energy -= coef * 10;
+        this.energy -= coef * Math.pow(this.energy, 0.5);
     }
 
     died() {
