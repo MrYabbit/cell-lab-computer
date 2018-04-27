@@ -13,7 +13,8 @@ export class Simulation extends Component {
 
     componentDidMount() {
         this.cells = new CellGroup();
-        this.g = new Graphics(document.getElementById("renderer-canvas"));
+        let can = document.getElementById("renderer-canvas");
+        this.g = new Graphics(can);
         this.cells.add(new Cell(this.g, 100, 100, 50));
 
 

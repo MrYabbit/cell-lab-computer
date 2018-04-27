@@ -8,6 +8,17 @@ export class Renderer extends Component {
         super(props);
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return false;
+    }
+
+    componentDidMount() {
+        this.can = document.getElementById("renderer-canvas");
+        this.div = document.getElementById("renderer");
+        this.can.height = this.div.offsetHeight;
+        this.can.width = this.div.offsetWidth;
+    }
+
     render() {
         return (
             <div id="renderer">

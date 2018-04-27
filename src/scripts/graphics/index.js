@@ -1,10 +1,11 @@
 import * as config from "../../config/graphics";
+import * as global_config from "../../config";
 
 export default class Graphics {
     constructor(canvas) {
+        this.config = config;
         this.canvas = canvas;
         this.ctx = this.canvas.getContext("2d");
-        this.config = config;
         this.clear();
 
         this.colors = {
