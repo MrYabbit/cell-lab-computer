@@ -9,13 +9,18 @@ export class Simulation extends Component {
     constructor(props) {
         super(props);
         this.config = config;
+
+        this.addCell = ((e) => {
+            let rect = this.can.getBoundingClientRect();
+            this.cells.add(new Cell(this.g, e.clientX - rect.left, e.clientY - rect.top, this.config.DEFAULT_CELL_ENERGY));
+        }).bind(this);
     }
 
     componentDidMount() {
         this.cells = new CellGroup();
-        let can = document.getElementById("renderer-canvas");
-        this.g = new Graphics(can);
-        this.cells.add(new Cell(this.g, 100, 100, 50));
+        this.can = document.getElementById("renderer-canvas");
+        this.g = new Graphics(this.can);
+        this.cells.add(new Cell(this.g, 100, 100, this.config.DEFAULT_CELL_ENERGY));
 
 
         setInterval(this.tick.bind(this), config.TPS);
@@ -30,6 +35,6 @@ export class Simulation extends Component {
 
 
     render() {
-        return (<Renderer/>);
+        return (<Renderer onClick={this.addCell}/>);
     }
 }

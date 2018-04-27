@@ -22,7 +22,7 @@ export class Renderer extends Component {
     render() {
         return (
             <div id="renderer">
-                <canvas id="renderer-canvas"></canvas>
+                <canvas id="renderer-canvas" onClick={this.props.onClick}></canvas>
             </div>
         );
     }

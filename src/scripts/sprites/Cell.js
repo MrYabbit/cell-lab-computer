@@ -6,6 +6,7 @@ export default class Cell extends Sprite {
         super(graphics, x, y);
         this.energy = energy;
         this.config = config;
+        if (this.energy < 0) this.energy = this.config.MAX_ENERGY;
     }
 
     get_radius() {
@@ -13,6 +14,7 @@ export default class Cell extends Sprite {
     }
 
     draw() {
+        console.log(`this.g.draw_circle(${this.x}, ${this.y}, ${this.get_radius()}, ${this.config.COLOR});`);
         this.g.draw_circle(this.x, this.y, this.get_radius(), this.config.COLOR);
     }
 
