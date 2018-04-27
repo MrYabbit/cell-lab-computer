@@ -27,7 +27,7 @@ class App extends Component {
             <div className="App">
                 <Provider store={store}>
                     <PersistGate
-                        loading={<LoadingAnimation/>} // This component will be shown until redux-persistors restores storage
+                        loading={<LoadingAnimation/>} // This component will be shown until redux-persist restores storage
                         persistor={persistor}>
                         <Simulation/>
                     </PersistGate>
