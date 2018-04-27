@@ -34,4 +34,6 @@ export default class Cell extends Sprite {
         this.x += this.direction.x*coef;
         this.y += this.direction.y*coef;
     }
+
+    //make a create child function to add a new child cell to the already created cell
 }
