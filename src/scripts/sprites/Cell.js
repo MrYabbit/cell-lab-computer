@@ -2,10 +2,11 @@ import Sprite from "./Sprite";
 import * as config from "../../config/Cell"
 
 export default class Cell extends Sprite {
-    constructor(graphics, x, y, energy) {
+    constructor(graphics, environment, x, y, energy) {
         super(graphics, x, y);
         this.energy = energy;
         this.config = config;
+        this.entvironment = environment;
         if (this.energy < 0) this.energy = this.config.MAX_ENERGY;
     }
 
@@ -14,7 +15,6 @@ export default class Cell extends Sprite {
     }
 
     draw() {
-        console.log(`this.g.draw_circle(${this.x}, ${this.y}, ${this.get_radius()}, ${this.config.COLOR});`);
         this.g.draw_circle(this.x, this.y, this.get_radius(), this.config.COLOR);
     }
 

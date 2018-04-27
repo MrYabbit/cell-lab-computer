@@ -21,23 +21,45 @@ export class CellGroup {
         return colllided;
     }
 
-    draw() {
+    draw () {
         this.objects.forEach(function (obj) {
             obj.draw();
-        })
+        });
     }
 
-    starve(coef) {
+    starve (coef) {
         this.objects.forEach(function (obj) {
             obj.starve(coef);
-        })
+        });
     }
 
-    check_dead() {
+    died () {
         for (let i = 0; i < this.objects.length; ++i) {
             if (this.objects[i].died()) {
                 this.objects.splice(i, 1);
             }
         }
+    }
+}
+
+export class FoodGroup {
+    constructor () {
+        this.objects = [];
+    }
+
+    add (obj) {
+        this.objects.push(obj);
+    }
+
+    draw() {
+        this.objects.forEach(function (obj) {
+            obj.draw();
+        });
+    }
+
+    starve (coef) {
+        this.objects.forEach(function (obj) {
+            obj.starve(coef);
+        })
     }
 }
