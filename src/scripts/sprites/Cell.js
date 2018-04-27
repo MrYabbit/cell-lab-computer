@@ -7,6 +7,10 @@ export default class Cell extends Sprite {
         this.energy = energy;
         this.config = config;
         this.entvironment = environment;
+        this.direction = {
+            x: 20,
+            y: 20
+        };
         if (this.energy < 0) this.energy = this.config.MAX_ENERGY;
     }
 
@@ -24,5 +28,10 @@ export default class Cell extends Sprite {
 
     died() {
         return this.energy < this.config.MIN_ENERGY;
+    }
+
+    move(coef) {
+        this.x += this.direction.x*coef;
+        this.y += this.direction.y*coef;
     }
 }

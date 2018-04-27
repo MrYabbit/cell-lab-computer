@@ -40,6 +40,12 @@ export class CellGroup {
             }
         }
     }
+
+    move (coef) {
+        this.objects.forEach(function (obj) {
+            obj.move(coef);
+        });
+    }
 }
 
 export class FoodGroup {

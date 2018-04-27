@@ -23,7 +23,6 @@ export class Simulation extends Component {
         this.can = document.getElementById("renderer-canvas");
         this.g = new Graphics(this.can);
         this.entvironment = new Entvironment(this.g, this.cells, this.food);
-        this.cells.add(new Cell(this.g, this.entvironment, 100, 100, this.config.DEFAULT_CELL_ENERGY));
 
 
         setInterval(this.tick.bind(this), config.TPS);
@@ -31,6 +30,7 @@ export class Simulation extends Component {
 
     tick() {
         this.g.clear();
+        this.entvironment.move(this.config.APT);
         this.entvironment.starve(this.config.APT);
         this.entvironment.died();
         this.entvironment.draw();
