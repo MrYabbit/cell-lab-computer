@@ -1,10 +1,10 @@
-import { persistCombineReducers } from "redux-persist";
+import {persistCombineReducers} from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import * as actionType from '../actions/types';
 
 const usernameInitialState = "CellMan";
-const username = (state=usernameInitialState, action) => {
-    switch(action.type) {
+const username = (state = usernameInitialState, action) => {
+    switch (action.type) {
         case actionType.CHANGE_USERNAME:
             return action.data.username;
         default:
@@ -12,7 +12,7 @@ const username = (state=usernameInitialState, action) => {
     }
 };
 
-const  config = {
+const config = {
     key: "root",
     storage,
 };

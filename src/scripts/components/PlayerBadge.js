@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 
 export class PlayerBadgeEdditable extends Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             username: props.username // this here reflects local changes - doesn't save string in inputbox to global storage
@@ -14,8 +14,8 @@ export class PlayerBadgeEdditable extends Component {
         };
 
         this.handleSubmit = (event) => {
-           event.preventDefault();
-           this.props.changeUsername(this.state.username); // this function is supplied by container
+            event.preventDefault();
+            this.props.changeUsername(this.state.username); // this function is supplied by container
         };
     }
 
@@ -29,8 +29,8 @@ export class PlayerBadgeEdditable extends Component {
     }
 }
 
-export class PlayerBadge extends  Component {
-    constructor (props) {
+export class PlayerBadge extends Component {
+    constructor(props) {
         super(props);
         this.state = {
             editable: false
@@ -49,13 +49,14 @@ export class PlayerBadge extends  Component {
         };
     }
 
-    render () {
+    render() {
         if (this.state.editable) {
             return <PlayerBadgeEdditable username={this.props.username} changeUsername={
-                        (username) => {
-                            this.props.changeUsername(username); this.disableEditing();
-                        }
-                    }/> // since PlayerBadgeEditable hasn't its own container we have to pass everything
+                (username) => {
+                    this.props.changeUsername(username);
+                    this.disableEditing();
+                }
+            }/> // since PlayerBadgeEditable hasn't its own container we have to pass everything
         } else {
             return <p onClick={this.allowEditing}>Username: {this.props.username}</p>
         }

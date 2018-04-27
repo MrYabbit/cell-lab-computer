@@ -2,14 +2,12 @@ import React, {Component} from "react";
 import "../../styles/components/LoadingAnimation.css"
 
 export class LoadingAnimation extends Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
-        this.state = {
-
-        };
+        this.state = {};
     }
 
-    render () {
+    render() {
         return (
             <div id={"loading-animation"}>
                 Loading ...
