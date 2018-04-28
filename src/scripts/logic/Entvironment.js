@@ -9,6 +9,11 @@ export class Entvironment {
         this.x = x;
         this.y = y;
         this.radius = radius;
+        this.last_id = 0;
+    }
+
+    get_id() { // returns unique id
+        return (++this.last_id);
     }
 
     move (coef) {

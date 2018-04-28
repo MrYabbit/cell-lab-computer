@@ -28,6 +28,7 @@ export class CellGroup {
                 obj.collide(collided[i], coef);
             }
             obj.collide_with_edge(coef);
+            obj.follow_connected();
         });
     }
 

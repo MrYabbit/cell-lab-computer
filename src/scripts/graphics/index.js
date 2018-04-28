@@ -24,9 +24,10 @@ export default class Graphics {
         this.ctx.fill();
     }
 
-    draw_stroke_circle(x, y, radius, color) {
+    draw_stroke_circle(x, y, radius, color, width=1) {
         this.ctx.beginPath();
         this.ctx.arc(x, y, radius, 0, 2 * Math.PI);
+        this.ctx.lineWidth = width;
         this.ctx.strokeStyle = color;
         this.ctx.stroke();
 
