@@ -1,9 +1,10 @@
 export default class Sprite {
-    constructor(graphics, x, y) {
+    constructor(graphics, environment, x, y) {
         this.g = graphics;
+        this.environment = environment;
         this.x = x;
         this.y = y;
-        this.type = undefined;
+        this.id = this.environment.get_id();
     }
 
     draw() {
