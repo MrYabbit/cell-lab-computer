@@ -1,0 +1,21 @@
+#menu {
+    z-index: 1;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+
+.menu-hidden {
+    position: fixed;
+    right: -100%;
+}
+
+.menu-shown {
+    position: fixed;
+    right: 0;
+    background-color: cadetblue;
+}
+
+#menu-button {
+    z-index: 2;
+}
