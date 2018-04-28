@@ -3,6 +3,7 @@ import {persistor, store} from "./store";
 import {PersistGate} from "redux-persist/es/integration/react";
 import {Provider} from "react-redux";
 import {PlayerBadge} from "./containers/PlayerBadge";
+import {Menu} from "./components/Menu";
 import {Simulation} from "./containers/Simulation";
 import {LoadingAnimation} from "./components/LoadingAnimation";
 
@@ -29,6 +30,7 @@ class App extends Component {
                         loading={
                             <LoadingAnimation/>} // This component will be shown until redux-persist restores storage
                         persistor={persistor}>
+                        <Menu/>
                         <Simulation/>
                     </PersistGate>
                 </Provider>
