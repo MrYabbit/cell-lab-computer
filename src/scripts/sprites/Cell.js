@@ -124,7 +124,7 @@ export default class Cell extends Sprite {
     }
 
     sunbath(coef) {
-        let growth = Math.pow(this.y, 10)/Math.pow(this.g.canvas.height*0.7, 10);
+        let growth = Math.pow(this.y, 10)/Math.pow(this.g.canvas.height*0.75, 10);
         this.energy = Math.min(this.energy+Math.min(growth, this.config.MAX_GROWTH)*coef, this.config.MAX_ENERGY);
     }
 
@@ -141,7 +141,6 @@ export default class Cell extends Sprite {
     }
 
     die() {
-        console.log(this.id + " just died");
         this.energy = 0;
         this.connections.forEach((obj) => {
             this.entvironment.destroy_connection(obj);
