@@ -40,4 +40,12 @@ export class Entvironment {
         this.cells.draw();
         this.g.draw_stroke_circle(this.x, this.y, this.radius, this.g.colors.black);
     }
+
+    sunbath(coef) {
+        this.cells.sunbath(coef);
+    }
+
+    resistance(coef) {
+        this.cells.resistance(coef);
+    }
 }

@@ -9,8 +9,8 @@ export default class Cell extends Sprite {
         this.config = config;
         this.entvironment = environment;
         this.direction = {
-            x: 20,
-            y: 20
+            x: 0,
+            y: 0
         };
         if (this.energy < 0) this.energy = this.config.MAX_ENERGY;
     }
@@ -20,7 +20,8 @@ export default class Cell extends Sprite {
     }
 
     draw() {
-        this.g.draw_circle(this.x, this.y, this.get_radius(), this.config.COLOR);
+        this.g.draw_circle(this.x, this.y, this.get_radius(), this.config.COLOR_FILL);
+        this.g.draw_stroke_circle(this.x, this.y, this.get_radius(), this.config.COLOR_STROKE);
     }
 
     starve(coef) {
@@ -82,6 +83,27 @@ export default class Cell extends Sprite {
     }
 
     reproduce () {
-        //TODO: make a create child function to add a new child cell to the already created cell
+        if (this.energy < this.config.REPRODUCE_ENERGY) return;
+        this.entvironment.cells.add(new Cell(this.g, this.entvironment, this.x-1, this.y, this.energy/2));
+        this.entvironment.cells.add(new Cell(this.g, this.entvironment, this.x+1, this.y, this.energy/2));
+        this.energy = 0;
+    }
+
+    sunbath(coef) {
+        let growth = Math.pow(this.y, 10)/Math.pow(310, 10);
+        this.energy = Math.min(this.energy+Math.min(growth, this.config.MAX_GROWTH)*coef, this.config.MAX_ENERGY);
+        console.log(this.energy);
+    }
+
+    get_speed () {
+        return Math.sqrt(Math.pow(this.direction.x, 2) + Math.pow(this.direction.y, 2));
+    }
+
+    resistance(coef) {
+        let resist_force = {
+            x: -this.direction.x*this.get_speed()*this.entvironment.config.VISCOSITY*coef/10,
+            y: -this.direction.y*this.get_speed()*this.entvironment.config.VISCOSITY*coef/10
+        };
+        this.push(resist_force);
     }
 }

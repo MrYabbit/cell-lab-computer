@@ -56,6 +56,24 @@ export class CellGroup {
             obj.move(coef);
         });
     }
+
+    sunbath(coef) {
+        this.objects.forEach(function (obj) {
+            obj.sunbath(coef);
+        })
+    }
+
+    reproduce () {
+        this.objects.forEach(function(obj) {
+            obj.reproduce();
+        });
+    }
+
+    resistance (coef) {
+        this.objects.forEach(function (obj) {
+            obj.resistance(coef);
+        })
+    }
 }
 
 export class FoodGroup {

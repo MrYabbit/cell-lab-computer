@@ -31,8 +31,11 @@ export class Simulation extends Component {
     tick() {
         this.g.clear();
         this.entvironment.move(this.config.APT);
+        this.entvironment.resistance(this.config.APT);
         this.entvironment.collide(this.config.APT);
+        this.entvironment.sunbath(this.config.APT);
         this.entvironment.starve(this.config.APT);
+        this.entvironment.reproduce();
         this.entvironment.died();
         this.entvironment.draw();
     }
