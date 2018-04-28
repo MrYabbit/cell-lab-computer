@@ -90,7 +90,7 @@ export default class Cell extends Sprite {
     }
 
     sunbath(coef) {
-        let growth = Math.pow(this.y, 10)/Math.pow(310, 10);
+        let growth = Math.pow(this.y, 10)/Math.pow(this.g.canvas.height*0.7, 10);
         this.energy = Math.min(this.energy+Math.min(growth, this.config.MAX_GROWTH)*coef, this.config.MAX_ENERGY);
         console.log(this.energy);
     }
