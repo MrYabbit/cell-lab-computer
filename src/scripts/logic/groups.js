@@ -28,7 +28,6 @@ export class CellGroup {
                 obj.collide(collided[i], coef);
             }
             obj.collide_with_edge(coef);
-            obj.follow_connected();
         });
     }
 
@@ -44,9 +43,15 @@ export class CellGroup {
         });
     }
 
-    died () { // removes dead cells
+    died() {
+        this.objects.forEach((obj) => {
+            obj.died();
+        })
+    }
+
+    destroy_cell (cell) { // removes dead cells
         for (let i = 0; i < this.objects.length; ++i) {
-            if (this.objects[i].died()) {
+            if (this.objects[i].id == cell.id) {
                 this.objects.splice(i, 1);
             }
         }
@@ -96,5 +101,39 @@ export class FoodGroup {
         this.objects.forEach(function (obj) {
             obj.starve(coef);
         })
+    }
+}
+
+export class ConnectionGroup {
+    constructor () {
+        this.objects = [];
+    }
+
+    add (obj) {
+        this.objects.push(obj);
+        obj.obj1.connect(obj);
+        obj.obj2.connect(obj);
+    }
+
+    draw () {
+        this.objects.forEach((obj) => {
+            obj.draw();
+        });
+    }
+
+    contract () {
+        this.objects.forEach((obj)=>{
+            obj.check_status();
+        });
+    }
+
+    destroy_connection (obj) {
+        for (let i = 0; i < this.objects.length; ++i) {
+            if (this.objects[i].id === obj.id) {
+                this.objects.splice(i--, 1);
+            }
+        }
+        obj.obj1.disconnect(obj);
+        obj.obj2.disconnect(obj);
     }
 }

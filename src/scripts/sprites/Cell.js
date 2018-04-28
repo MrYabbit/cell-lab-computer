@@ -1,6 +1,7 @@
 import Sprite from "./Sprite";
 import * as config from "../../config/Cell";
 import * as global_config from "../../config";
+import {Connection} from "./Connection";
 
 export default class Cell extends Sprite {
     constructor(graphics, environment, x, y, energy) {
@@ -14,7 +15,6 @@ export default class Cell extends Sprite {
             y: 0
         };
         if (this.energy < 0) this.energy = this.config.MAX_ENERGY;
-        console.log(this.id + " just born");
     }
 
     get_radius() {
@@ -34,7 +34,9 @@ export default class Cell extends Sprite {
     }
 
     died() {
-        return this.energy < this.config.MIN_ENERGY;
+        if (this.energy < this.config.MIN_ENERGY) {
+            this.die();
+        }
     }
 
     move(coef) {
@@ -46,16 +48,12 @@ export default class Cell extends Sprite {
         this.connections.push(obj);
     }
 
-    disconnect(id) { //removes connection with obj cell
-        console.log(id);
+    disconnect(obj) { //removes connection with obj cell
         for (let i = 0; i < this.connections.length; ++i) {
-            if (this.connections[i].id == id) {
-                this.connections.splice(i, 1);
-                --i;
-                console.log("disconnected! left " + this.connections.length);
+            if (this.connections[i].id === obj.id) {
+                this.connections.splice(i--, 1);
             }
         }
-        console.log("left " + this.connections.length);
     }
 
 
@@ -99,27 +97,6 @@ export default class Cell extends Sprite {
         this.y += new_direction.y;
     }
 
-    follow_connected() {
-        for (let i = 0; i < this.connections.length; ++i) {
-            let obj = this.connections[i];
-            let new_direction = {
-                x: this.x - obj.x,
-                y: this.y - obj.y,
-            };
-            let len = Math.sqrt(Math.pow(new_direction.x, 2) + Math.pow(new_direction.y, 2));
-            new_direction.x /= len;
-            new_direction.y /= len;
-            let overlap = this.get_radius() + obj.get_radius() - len;
-            let push_force = {
-                x: new_direction.x*overlap/2,
-                y: new_direction.y*overlap/2
-            };
-            this.push(push_force);
-            new_direction.x *= overlap/30;
-            new_direction.y *= overlap/30;
-            this.x += new_direction.x;
-        }
-    }
 
     push(direction) {
         this.direction.x += direction.x;
@@ -130,15 +107,18 @@ export default class Cell extends Sprite {
         if (this.energy < this.config.REPRODUCE_ENERGY) return;
         let first = new Cell(this.g, this.entvironment, this.x-1, this.y+1, this.energy/2);
         let second = new Cell(this.g, this.entvironment, this.x+1, this.y-1, this.energy/2);
-        first.connect(second);
-        second.connect(first);
         this.entvironment.cells.add(first);
         this.entvironment.cells.add(second);
-        for (let i = 0; i < this.connections.length; ++i) {
-            this.connections[i].connect(first);
-            this.connections[i].connect(second);
-            first.connect(this.connections[i]);
-            second.connect(this.connections[i]);
+        let connection = new Connection(this.environment, first, second);
+        this.entvironment.add_connection(connection);
+        for (let i = 0; i < this.connections.length;) {
+            let conn = this.connections[i];
+            let other_obj = (conn.obj1.id === this.id)?conn.obj2:conn.obj1;
+            let connection_first = new Connection(this.environment, other_obj, first);
+            let connection_second = new Connection(this.environment, other_obj, second);
+            this.environment.destroy_connection(this.connections[i]);
+            this.entvironment.add_connection(connection_first);
+            this.entvironment.add_connection(connection_second);
         }
         this.die()
     }
@@ -164,7 +144,8 @@ export default class Cell extends Sprite {
         console.log(this.id + " just died");
         this.energy = 0;
         this.connections.forEach((obj) => {
-            obj.disconnect(this.id);
-        })
+            this.entvironment.destroy_connection(obj);
+        });
+        this.entvironment.destroy_cell(this);
     }
 }

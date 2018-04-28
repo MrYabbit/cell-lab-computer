@@ -4,5 +4,3 @@ export const COLOR_STROKE = "#000000";
 export const COLOR_FILL = "#00FF00";
 export const MAX_GROWTH = 15;
 export const REPRODUCE_ENERGY = 90;
-export const CONNECTION_COLOR = "#232629";
-export const CONNECTION_WIDTH = 2;

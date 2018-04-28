@@ -1,11 +1,12 @@
 import * as config from "../../config/Entvironment";
 
 export class Entvironment {
-    constructor (graphics, cells, food, x, y, radius) {
+    constructor (graphics, cells, food, connections, x, y, radius) {
         this.config = config;
         this.g = graphics;
         this.cells = cells;
         this.food = food;
+        this.connections = connections;
         this.x = x;
         this.y = y;
         this.radius = radius;
@@ -26,6 +27,7 @@ export class Entvironment {
 
     collide (coef) {
         this.cells.collide(coef);
+        this.connections.contract();
     }
 
     starve (coef) {
@@ -43,6 +45,7 @@ export class Entvironment {
     draw () {
         this.food.draw();
         this.cells.draw();
+        this.connections.draw();
         this.g.draw_stroke_circle(this.x, this.y, this.radius, this.g.colors.black);
     }
 
@@ -52,5 +55,17 @@ export class Entvironment {
 
     resistance(coef) {
         this.cells.resistance(coef);
+    }
+
+    destroy_connection(connection) {
+        this.connections.destroy_connection(connection);
+    }
+
+    add_connection(conn) {
+        this.connections.add(conn);
+    }
+
+    destroy_cell(cell) {
+        this.cells.destroy_cell(cell);
     }
 }
