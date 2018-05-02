@@ -10,7 +10,8 @@
     "react-scripts": "1.1.4",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
-    "redux-persist": "^5.9.1"
+    "redux-persist": "^5.9.1",
+    "svg.js": "^2.6.4"
   },
   "scripts": {
     "start": "react-scripts start",
