@@ -12,4 +12,10 @@ export default class Environment {
     add_cell(cell) {
         this.cells.push(cell);
     }
+
+    move(coef) {
+        this.cells.forEach((obj)=>{
+            obj.move(coef);
+        })
+    }
 }

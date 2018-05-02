@@ -5,6 +5,7 @@ import Sprite from "../sprites/Sprite";
 import "../../styles/components/Simulation.css";
 import Environment from "../logic/Environment";
 import Vector from "../utils/Vector";
+import Cell from "../sprites/Cell";
 
 export class Simulation extends Component {
     constructor(props) {
@@ -18,14 +19,12 @@ export class Simulation extends Component {
     componentDidMount() {
         this.g = new Graphics("renderer");
         this.env = new Environment(this.g);
-        this.sprite = new Sprite(this.env);
-        this.sprite.draw.rect = this.sprite.draw.root.rect(50, 50).move(50, 50).fill(this.g.colors.green);
-        this.sprite.draw.circle = this.sprite.draw.root.circle(100).fill(this.g.colors.red);
+        this.env.add_cell(new Cell(this.env, this.config.DEFAULT_CELL_ENERGY).push(new Vector(1000, 1000)));
         setInterval(this.tick.bind(this), config.TPS);
     }
 
     tick() {
-        this.sprite.draw.root.dmove(1, 1);
+        this.env.move(1/this.config.TPS);
     }
 
 

@@ -7,12 +7,17 @@ export default class Cell extends Sprite {
         super(env);
         this.config = cell_config;
         this.energy = energy;
-        this.movement = Vector(0, 0);
+        if (this.energy < 0) this.energy = Infinity;
+        this.movement = new Vector(0, 0);
 
         this.draw.body = this.draw.root.circle(this.radius)
-                                        .center(this.position.x, this.position.y)
+                                        .center(this.x, this.y)
                                         .fill(this.config.COLOR_FILL)
                                         .stroke(this.config.COLOR_STROKE);
+    }
+
+    onMove() {
+        this.draw.root.center(this.x, this.y)
     }
 
     get energy () {
@@ -33,18 +38,23 @@ export default class Cell extends Sprite {
 
     push (vec) {
         this.movement = this.movement.add(vec.divide(this.weight));
+        return this;
     }
 
     move (coef) {
         this.position = this.position.add(this.movement.multiply(coef));
+        console.log(`moved to x:${this.x} y:${this.y}`);
+        return this;
     }
 
     starve (coef) {
         this.energy -= coef*10;
+        return this;
     }
 
     die () {
         this.energy = 0;
+        return this;
     }
 
     dead () {

@@ -14,19 +14,19 @@ export default class Vector {
     }
 
     add (vec) {
-        return Vector(this.x + vec.x, this.y + vec.y);
+        return new Vector(this.x + vec.x, this.y + vec.y);
     }
 
     substract (vec) {
-        return Vector(this.x - vec.x, this.y - vec.y);
+        return new Vector(this.x - vec.x, this.y - vec.y);
     }
 
     multiply (val) {
-        return Vector(this.x * val, this.y * val);
+        return new Vector(this.x * val, this.y * val);
     }
 
     divide (val) {
-        return Vector(this.x / val, this.y / val);
+        return new Vector(this.x / val, this.y / val);
     }
 
     norm () {
