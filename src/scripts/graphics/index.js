@@ -1,11 +1,14 @@
 import * as config from "../../config/graphics";
 import * as global_config from "../../config";
 
-export default class Graphics {
-    constructor(canvas) {
+export default class Graphics_canvas {
+    constructor(parent) {
         this.config = config;
-        this.canvas = canvas;
-        this.ctx = this.canvas.getContext("2d");
+        this._canvas = document.createElement("_canvas");
+        this._canvas.height = parent.offsetHeight;
+        this._canvas.width = parent.offsetWidth;
+        parent.appendChild(this._canvas);
+        this._ctx = this._canvas.getContext("2d");
         this.clear();
 
         this.colors = {
@@ -18,32 +21,38 @@ export default class Graphics {
     }
 
     draw_circle(x, y, radius, color) {
-        this.ctx.beginPath();
-        this.ctx.arc(x, y, radius, 0, 2 * Math.PI);
-        this.ctx.fillStyle = color;
-        this.ctx.fill();
+        this._ctx.beginPath();
+        this._ctx.arc(x, y, radius, 0, 2 * Math.PI);
+        this._ctx.fillStyle = color;
+        this._ctx.fill();
     }
 
     draw_stroke_circle(x, y, radius, color, width=1) {
-        this.ctx.beginPath();
-        this.ctx.arc(x, y, radius, 0, 2 * Math.PI);
-        this.ctx.lineWidth = width;
-        this.ctx.strokeStyle = color;
-        this.ctx.stroke();
+        this._ctx.beginPath();
+        this._ctx.arc(x, y, radius, 0, 2 * Math.PI);
+        this._ctx.lineWidth = width;
+        this._ctx.strokeStyle = color;
+        this._ctx.stroke();
 
     }
 
     draw_line(x1, y1, x2, y2, color, width) {
-        this.ctx.beginPath();
-        this.ctx.moveTo(x1, y1);
-        this.ctx.lineWidth = width;
-        this.ctx.lineTo(x2, y2);
-        this.ctx.strokeStyle = color;
-        this.ctx.stroke();
+        this._ctx.beginPath();
+        this._ctx.moveTo(x1, y1);
+        this._ctx.lineWidth = width;
+        this._ctx.lineTo(x2, y2);
+        this._ctx.strokeStyle = color;
+        this._ctx.stroke();
     }
 
     clear() {
-        this.ctx.fillStyle = this.config.BACKGROUND_COLOR;
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this._ctx.fillStyle = this.config.BACKGROUND_COLOR;
+        this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
+    }
+}
+
+export class Graphics_svg {
+    constructor (parent) {
+
     }
 }
