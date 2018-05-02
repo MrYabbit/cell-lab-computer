@@ -1,9 +1,6 @@
 import React, {Component} from "react";
-import {CellGroup, FoodGroup, ConnectionGroup} from "../logic/groups";
 import * as config from "../../config";
-import Cell from "../sprites/Cell";
 import Graphics from "../graphics";
-import {Entvironment} from "../logic/Entvironment";
 import "../../styles/components/Simulation.css";
 
 export class Simulation extends Component {
@@ -12,33 +9,21 @@ export class Simulation extends Component {
         this.config = config;
 
         this.addCell = ((e) => {
-            let rect = this.parent.getBoundingClientRect();
-            this.cells.add(new Cell(this.g, this.entvironment, e.clientX - rect.left, e.clientY - rect.top, this.config.DEFAULT_CELL_ENERGY));
         });
+
+        this.draw = {};
     }
 
     componentDidMount() {
-        this.cells = new CellGroup();
-        this.food = new FoodGroup();
-        this.connections = new ConnectionGroup();
-        this.parent = document.getElementById("renderer");
-        this.g = new Graphics(this.parent);
-        this.entvironment = new Entvironment(this.g, this.cells, this.food, this.connections, this.parent.offsetWidth/2, this.parent.offsetHeight/2, Math.min(this.parent.offsetHeight-10, this.parent.offsetWidth)/2);
-
-
+        this.g = new Graphics("renderer");
+        this.draw.root = this.g.draw.group();
+        this.draw.circle1 = this.draw.root.circle(100).fill("#F00").center(0, 0);
+        this.draw.circle2 = this.draw.root.circle(50).fill("#0F0").center(0, 0);
         setInterval(this.tick.bind(this), config.TPS);
     }
 
     tick() {
-        this.g.clear();
-        this.entvironment.move(this.config.APT);
-        this.entvironment.resistance(this.config.APT);
-        this.entvironment.collide(this.config.APT);
-        this.entvironment.sunbath(this.config.APT);
-        this.entvironment.starve(this.config.APT);
-        this.entvironment.reproduce();
-        this.entvironment.died();
-        this.entvironment.draw();
+
     }
 
 
