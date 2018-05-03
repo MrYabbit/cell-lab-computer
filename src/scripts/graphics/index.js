@@ -4,10 +4,11 @@ import * as global_config from "../../config";
 export default class Graphics_canvas {
     constructor(parent) {
         this.config = config;
-        this._canvas = document.createElement("_canvas");
+        this._canvas = document.createElement("canvas");
         this._canvas.height = parent.offsetHeight;
         this._canvas.width = parent.offsetWidth;
-        parent.appendChild(this._canvas);
+        this.parent = parent;
+        this.parent.appendChild(this._canvas);
         this._ctx = this._canvas.getContext("2d");
         this.clear();
 
