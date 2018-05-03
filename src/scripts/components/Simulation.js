@@ -11,20 +11,19 @@ export class Simulation extends Component {
     constructor(props) {
         super(props);
         this.config = config;
-
-        this.addCell = ((e) => {
-        });
     }
 
     componentDidMount() {
-        this.g = new Graphics("renderer");
-        this.env = new Environment(this.g);
-        this.env.add_cell(new Cell(this.env, this.config.DEFAULT_CELL_ENERGY).push(new Vector(1000, 1000)));
-        setInterval(this.tick.bind(this), config.TPS);
+        this.g = new Graphics("renderer"); // Creates new svg graphics in #renderer
+        this.env = new Environment(this.g); // Initializes Environment
+        this.env.add_cell(new Cell(this.env, this.config.DEFAULT_CELL_ENERGY).push(new Vector(1000, 1000))); // Adds test Cell into Environment
+        setInterval(this.tick.bind(this), 1000/config.TPS); // Calls tick() TPS times each second;
     }
 
     tick() {
-        this.env.move(1/this.config.TPS);
+        this.env.generate_movement(1/this.config.TPS); // check physics and generates movement
+        this.env.apply_movement(1/this.config.TPS); // moves everything in Environment
+        this.env.update_graphics(); // this updates shown svg
     }
 
 

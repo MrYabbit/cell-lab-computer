@@ -15,7 +15,6 @@ export default class Sprite {
 
     set x(val) {
         this._position.x = val;
-        this.onMove();
     }
 
     get y() {
@@ -24,11 +23,10 @@ export default class Sprite {
 
     set y(val) {
         this._position.y = val;
-        this.onMove();
     }
 
     get position () {
-        return new Vector(this.x, this.y);
+        return this._position;
     }
 
     set position (val) {
@@ -37,10 +35,6 @@ export default class Sprite {
     }
 
     destroy() {
-        this.g.draw.remove(this.draw.root);
-    }
-
-    onMove() {
-        return this;
+        this.g.draw.remove(this.draw.root); // remove graphics
     }
 }
