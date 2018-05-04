@@ -14,6 +14,7 @@ export default class Connection {
         this.draw.line = this.draw.root.line(0, 0, 0, 0).stroke({
             width: this.config.CONNECTION_WIDTH,
             color: this.config.CONNECTION_COLOR,
+            linecap: "round"
         });
     }
 
@@ -43,6 +44,10 @@ export default class Connection {
 
     update_graphics() {
         this.draw.root.move(this.cell1.x, this.cell1.y);
-        this.draw.line.plot(0, 0, this.cell2.position.subtract(this.cell1.position).x, this.cell2.position.subtract(this.cell1.position).y);
+        let p_start = (this.cell1.radius)/(this.cell1.radius + this.cell2.radius);
+        let p_end = 1-p_start;
+        let start = this.vec.multiply((1-this.config.PART_VISIBLE)*p_start);
+        let end = this.vec.multiply((1-this.config.PART_VISIBLE)*p_end);
+        this.draw.line.plot(start.x, start.y, this.vec.x - end.x, this.vec.y - end.y);
     }
 }
