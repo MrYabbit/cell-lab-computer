@@ -87,7 +87,7 @@ export default class Cell extends Sprite {
     }
 
     starve (coef) {
-        this.energy -= coef*10;
+        this.energy -= coef*this.config.STARVE_RATE*Math.sqrt(this.energy/100);
         return this;
     }
 
@@ -100,9 +100,25 @@ export default class Cell extends Sprite {
         return this.energy < this.config.MIN_ENERGY;
     }
 
+    destroy() { // this method should be called just from Environment.check_dead - for killing cell use this.die
+        super.destroy.call(this);
+    }
+
     update_graphics() {
         // this updates svg
         this.draw.root.move(this.x, this.y);
         this.draw.body.radius(this.radius);
+    }
+
+    check_reproduction() {
+        if (this.energy > this.config.REPRODUCE_ENERGY) {
+            let child1 = new Cell(this.env, this.energy/2).move(this.position.add({x:1, y:1}));
+            let child2 = new Cell(this.env, this.energy/2).move(this.position.substract({x:1, y:1}));
+
+            this.env.add_cell(child1);
+            this.env.add_cell(child2);
+
+            this.die();
+        }
     }
 }

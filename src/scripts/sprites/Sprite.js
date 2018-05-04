@@ -35,6 +35,6 @@ export default class Sprite {
     }
 
     destroy() {
-        this.g.draw.remove(this.draw.root); // remove graphics
+        this.draw.root.remove(); // remove graphics
     }
 }

@@ -16,15 +16,18 @@ export class Simulation extends Component {
     componentDidMount() {
         this.g = new Graphics("renderer"); // Creates new svg graphics in #renderer
         this.env = new Environment(this.g); // Initializes Environment
-        this.env.add_cell(new Cell(this.env, this.config.DEFAULT_CELL_ENERGY).push(new Vector(1000, 1000))); // Adds test Cell into Environment
         setInterval(this.tick.bind(this), 1000/config.TPS); // Calls tick() TPS times each second;
     }
 
     tick() {
-        this.env.generate_movement(1/this.config.TPS); // check physics and generates movement
-        this.env.apply_movement(1/this.config.TPS); // moves everything in Environment
-        this.env.apply_friction(1/this.config.TPS); // applies friction of environment
-        this.env.update_graphics(); // this updates shown svg
+        console.log(this.env.cells);
+        this.env.generate_movement(1/this.config.TPS) // check physics and generates movement
+                .apply_movement(1/this.config.TPS) // moves everything in Environment
+                .apply_friction(1/this.config.TPS) // applies friction of environment
+                .starve(1/this.config.TPS) // makes 'em starve
+                .check_dead() // removes dead cells
+                .check_reproduction() // let 'em reproduce
+                .update_graphics(); // this updates shown svg
     }
 
 
