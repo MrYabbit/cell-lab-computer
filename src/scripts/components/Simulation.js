@@ -1,44 +1,30 @@
 import React, {Component} from "react";
-import {CellGroup, FoodGroup, ConnectionGroup} from "../logic/groups";
 import * as config from "../../config";
-import Cell from "../sprites/Cell";
 import Graphics from "../graphics";
-import {Entvironment} from "../logic/Entvironment";
 import "../../styles/components/Simulation.css";
+import Environment from "../logic/Environment";
+import Vector from "../utils/Vector";
 
 export class Simulation extends Component {
     constructor(props) {
         super(props);
         this.config = config;
-
-        this.addCell = ((e) => {
-            let rect = this.parent.getBoundingClientRect();
-            this.cells.add(new Cell(this.g, this.entvironment, e.clientX - rect.left, e.clientY - rect.top, this.config.DEFAULT_CELL_ENERGY));
-        });
     }
 
     componentDidMount() {
-        this.cells = new CellGroup();
-        this.food = new FoodGroup();
-        this.connections = new ConnectionGroup();
-        this.parent = document.getElementById("renderer");
-        this.g = new Graphics(this.parent);
-        this.entvironment = new Entvironment(this.g, this.cells, this.food, this.connections, this.parent.offsetWidth/2, this.parent.offsetHeight/2, Math.min(this.parent.offsetHeight-10, this.parent.offsetWidth)/2);
-
-
-        setInterval(this.tick.bind(this), config.TPS);
+        this.g = new Graphics("renderer"); // Creates new svg graphics in #renderer
+        this.env = new Environment(this.g); // Initializes Environment
+        setInterval(this.tick.bind(this), 1000/config.TPS); // Calls tick() TPS times each second;
     }
 
     tick() {
-        this.g.clear();
-        this.entvironment.move(this.config.APT);
-        this.entvironment.resistance(this.config.APT);
-        this.entvironment.collide(this.config.APT);
-        this.entvironment.sunbath(this.config.APT);
-        this.entvironment.starve(this.config.APT);
-        this.entvironment.reproduce();
-        this.entvironment.died();
-        this.entvironment.draw();
+        this.env.generate_movement(1/this.config.TPS) // check physics and generates movement
+                .apply_movement(1/this.config.TPS) // moves everything in Environment
+                .apply_friction(1/this.config.TPS) // applies friction of environment
+                .starve(1/this.config.TPS) // makes 'em starve
+                .check_dead() // removes dead cells and destroyed connections
+                .check_reproduction() // let 'em reproduce
+                .update_graphics(); // this updates shown svg
     }
 
 
