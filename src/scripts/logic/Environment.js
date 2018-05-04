@@ -1,4 +1,4 @@
-import * as environment_config from "../../config/Entvironment";
+import * as environment_config from "../../config/Environment";
 import * as config from "../../config";
 import Cell from "../sprites/Cell";
 import Vector from "../utils/Vector";
@@ -30,6 +30,12 @@ export default class Environment {
             obj.apply_movement(coef);
         });
         return this;
+    }
+
+    apply_friction(coef) { // this applies friction
+        this.cells.forEach((obj) => {
+            obj.apply_friction(coef);
+        })
     }
 
     update_graphics() {

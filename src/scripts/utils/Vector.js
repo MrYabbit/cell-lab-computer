@@ -8,9 +8,8 @@ export default class Vector {
         return Math.sqrt(this.x*this.x + this.y*this.y);
     }
 
-    set len(val) {
-        this.norm();
-        this.multiply(val);
+    set_len(val) {
+        return this.norm().multiply(val);
     }
 
     add (vec) {

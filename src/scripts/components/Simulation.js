@@ -23,6 +23,7 @@ export class Simulation extends Component {
     tick() {
         this.env.generate_movement(1/this.config.TPS); // check physics and generates movement
         this.env.apply_movement(1/this.config.TPS); // moves everything in Environment
+        this.env.apply_friction(1/this.config.TPS); // applies friction of environment
         this.env.update_graphics(); // this updates shown svg
     }
 

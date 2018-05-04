@@ -12,10 +12,11 @@ export default class Cell extends Sprite {
 
 
         // here is created graphics appearance of cell
-        this.draw.body = this.draw.root.circle(this.radius)
+        this.draw.body = this.draw.root.circle(0)
                                         .center(this.x, this.y)
                                         .fill(this.config.COLOR_FILL)
-                                        .stroke(this.config.COLOR_STROKE);
+                                        .stroke(this.config.COLOR_STROKE)
+                                        .radius(this.radius);
     }
 
     get energy () {
@@ -61,8 +62,9 @@ export default class Cell extends Sprite {
             let diff = this.position.substract(cell.position); // compute vector from this to cell
             if (diff.len < cell.radius + this.radius && diff.len > 0) { // if it is close enough
                 let overlap = cell.radius + this.radius - diff.len; // how much do cells overlap
-                let move_instantly = diff.norm().multiply(overlap).divide( 2).multiply(coef); // this vector moves cell instantly - to solve spawning cells in middle of others
-                let create_force   = diff.norm().multiply(overlap).divide(10).multiply(coef); // this vector represents the force that is caused by collision
+
+                let move_instantly = diff.norm().multiply(overlap).multiply(10  ).multiply(coef); // this vector moves cell instantly - to solve spawning cells in middle of others
+                let create_force   = diff.norm().multiply(overlap).multiply(1000).multiply(coef); // this vector represents the force that is caused by collision
 
                 // now apply those two vectors
                 this.dmove(move_instantly);
@@ -70,6 +72,13 @@ export default class Cell extends Sprite {
             }
         }
 
+    }
+
+    apply_friction (coef) {// applies friction
+        let friction = this.movement.len*this.movement.len * this.radius * this.env.config.VISCOSITY * coef;
+        if (friction) {
+            this.push(this.movement.set_len(-friction));
+        }
     }
 
     apply_movement (coef) {
@@ -94,5 +103,6 @@ export default class Cell extends Sprite {
     update_graphics() {
         // this updates svg
         this.draw.root.move(this.x, this.y);
+        this.draw.body.radius(this.radius);
     }
 }
