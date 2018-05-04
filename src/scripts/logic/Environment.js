@@ -2,6 +2,7 @@ import * as environment_config from "../../config/Environment";
 import * as config from "../../config";
 import Cell from "../sprites/Cell";
 import Vector from "../utils/Vector";
+import Connection from "../sprites/Connection";
 
 
 export default class Environment {
@@ -20,12 +21,23 @@ export default class Environment {
         return this;
     }
 
+    connect(cell1, cell2) {
+        let conn = new Connection(cell1, cell2);
+        cell1.add_connection(conn);
+        cell2.add_connection(conn);
+        this.add_connection(conn);
+    }
+
+    add_connection(conn) { // this method adds new connection (you have to create object yourself or by calling method Environment.connect(cell1, cell2))
+        this.connections.push(conn);
+    }
+
     generate_movement(coef) {
         this.cells.forEach((obj)=>{
             obj.generate_movement(coef);
         });
         this.connections.forEach((obj)=>{
-           obj.strech();
+           obj.stretch(coef);
         });
         return this;
     }
@@ -48,6 +60,9 @@ export default class Environment {
         this.cells.forEach((obj)=>{
             obj.update_graphics();
         });
+        this.connections.forEach((obj)=>{
+            obj.update_graphics();
+        });
         return this;
     }
 
@@ -60,13 +75,24 @@ export default class Environment {
     }
 
     check_dead() {
-        for (let i = 0; i < this.cells.length; ++i) {
+        for (let i = 0; i < this.cells.length; ++i) { // check cells
             let cell = this.cells[i];
             if (cell.dead()) {
                 cell.destroy();
                 this.cells.splice(i--, 1);
             }
         }
+
+        for (let i = 0; i < this.connections.length; ++i) { // check connections
+            if (this.connections[i].destroyed) {
+                let conn = this.connections[i];
+                conn.cell1.remove_connection(conn);
+                conn.cell2.remove_connection(conn);
+                conn.destroy();
+                this.connections.splice(i--, 1);
+            }
+        }
+
         return this;
     }
 

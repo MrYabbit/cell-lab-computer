@@ -16,7 +16,7 @@ export default class Vector {
         return new Vector(this.x + vec.x, this.y + vec.y);
     }
 
-    substract (vec) {
+    subtract (vec) {
         return new Vector(this.x - vec.x, this.y - vec.y);
     }
 

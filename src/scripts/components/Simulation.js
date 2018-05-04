@@ -1,11 +1,9 @@
 import React, {Component} from "react";
 import * as config from "../../config";
 import Graphics from "../graphics";
-import Sprite from "../sprites/Sprite";
 import "../../styles/components/Simulation.css";
 import Environment from "../logic/Environment";
 import Vector from "../utils/Vector";
-import Cell from "../sprites/Cell";
 
 export class Simulation extends Component {
     constructor(props) {
@@ -20,12 +18,11 @@ export class Simulation extends Component {
     }
 
     tick() {
-        console.log(this.env.cells);
         this.env.generate_movement(1/this.config.TPS) // check physics and generates movement
                 .apply_movement(1/this.config.TPS) // moves everything in Environment
                 .apply_friction(1/this.config.TPS) // applies friction of environment
                 .starve(1/this.config.TPS) // makes 'em starve
-                .check_dead() // removes dead cells
+                .check_dead() // removes dead cells and destroyed connections
                 .check_reproduction() // let 'em reproduce
                 .update_graphics(); // this updates shown svg
     }
