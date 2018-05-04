@@ -61,7 +61,7 @@ export default class Cell {
     }
 
     get radius () {
-        return Math.sqrt(this.energy)*5;
+        return Math.sqrt(this.energy)*2;
     }
 
     add_connection (conn) {
@@ -93,6 +93,7 @@ export default class Cell {
 
     generate_movement (coef) {
         this.check_collisions_with_other_cells(coef);
+        this.check_environment_border(coef);
     }
 
     check_collisions_with_other_cells (coef) {
@@ -109,10 +110,9 @@ export default class Cell {
             if (diff.len < cell.radius + this.radius && diff.len > 0) { // if it is close enough
                 let overlap = cell.radius + this.radius - diff.len; // how much do cells overlap
 
-                if (overlap > 1) // only if overlap is higher than 1 - than messes up scalability but square root increases little overlaps that causes "vibrating"
-                    overlap = Math.sqrt(overlap); // using square root of overlap for more smooth behavior after spawning cell on another
+                overlap = Math.sqrt(Math.sqrt(overlap+1))-1; // using square root of overlap for more smooth behavior after spawning cell on another
 
-                let move_instantly = diff.norm().multiply(overlap).multiply(5).multiply(coef).multiply(this.weight+cell.weight); // this vector moves cell instantly - to solve spawning cells in middle of others
+                let move_instantly = diff.norm().multiply(overlap).multiply(20).multiply(coef).multiply(this.weight+cell.weight); // this vector moves cell instantly - to solve spawning cells in middle of others
                 let create_force   = diff.norm().multiply(overlap).multiply(1000).multiply(coef).multiply(this.weight+cell.weight); // this vector represents the force that is caused by collision
 
                 // now apply those two vectors
@@ -123,7 +123,14 @@ export default class Cell {
                 cell.push(create_force.multiply(-1));
             }
         }
+    }
 
+    check_environment_border(coef) {
+        let vec = this.env.center.subtract(this.position);
+        let overlap = this.radius + vec.len - this.env.radius;
+        if (overlap > 0) {
+            this.push(vec.norm().multiply(overlap).multiply(coef).multiply(10000));
+        }
     }
 
     apply_friction (coef) {// applies friction
@@ -174,8 +181,29 @@ export default class Cell {
             this.env.add_cell(child2);
 
             this.env.connect(child1, child2); // connects childs together
+            let cells_to_connect = [];
+            for(let i = 0; i < this.connections.length; ++i) {
+                if (this.connections[i].cell1 === this) {
+                    cells_to_connect.push(this.connections[i].cell2);
+                } else {
+                    cells_to_connect.push(this.connections[i].cell1);
+                }
+            }
+            cells_to_connect.forEach((cell) => {
+                this.env.connect(cell, child1);
+                this.env.connect(cell, child2);
+            });
 
             this.die();
+        }
+    }
+
+    sunbath(coef) {
+        let light = this.position.y - this.env.g.parent.offsetHeight*0.8;
+        if (light > 0) {
+            light /= this.env.g.parent.offsetHeight*0.2;
+            light *= this.config.MAX_GROWTH;
+            this.energy += Math.min(light, this.config.MAX_GROWTH)*coef;
         }
     }
 }

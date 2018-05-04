@@ -1,3 +1,3 @@
-export const CONNECTION_MAX_LEN_DIFFERENCE = 0.5;
+export const CONNECTION_MAX_LEN_DIFFERENCE = 0.4;
 export const CONNECTION_COLOR = "#232629";
 export const CONNECTION_WIDTH = 2;

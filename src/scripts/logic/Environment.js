@@ -11,9 +11,24 @@ export default class Environment {
         this.config = environment_config;
         this.cells = []; // here will be stored all existing cells
         this.connections = []; // here will be stored all existing connections
+        this.center = new Vector(this.g.parent.offsetWidth/2, this.g.parent.offsetHeight/2);
+        this.radius = this.get_radius();
         this.g.draw.click((e) => { // this is event listener for clicking that will spawn new cells
             this.add_cell(new Cell(this, config.DEFAULT_CELL_ENERGY).move(new Vector(e.clientX, e.clientY)));
-        })
+        });
+        this.draw = {
+            root: this.g.draw.group(),
+        };
+        this.draw.border = this.draw.root.circle(this.radius*2).center(this.center.x, this.center.y)
+            .fill(this.config.BORDER_FILL_COLOR)
+            .stroke({
+                color: this.config.BORDER_COLOR,
+                width: this.config.BORDER_WIDTH,
+            });
+    }
+
+    get_radius() {
+        return Math.min(this.g.parent.offsetWidth, this.g.parent.offsetHeight)*0.48;
     }
 
     add_cell(cell) { // this method is used to add new cells to environment
@@ -63,15 +78,17 @@ export default class Environment {
         this.connections.forEach((obj)=>{
             obj.update_graphics();
         });
+        this.draw.border.center(this.center.x, this.center.y);
+        this.draw.border.radius(this.radius);
         return this;
     }
 
     starve (coef) {
         this.cells.forEach((obj)=>{
             obj.starve(coef);
+            obj.sunbath(coef);
         });
         return this;
-
     }
 
     check_dead() {

@@ -31,13 +31,13 @@ export default class Connection {
     }
 
     stretch(coef) {
-        let gap = this.vec.len - (this.cell1.radius + this.cell2.radius)*0.9;
+        let gap = this.vec.len - (this.cell1.radius + this.cell2.radius);
         if (gap >  this.config.CONNECTION_MAX_LEN_DIFFERENCE*(this.cell1.radius + this.cell2.radius)) {
             this.label_for_destruction();
         } else if (gap > 0) {
             let weight = this.cell1.weight + this.cell2.weight;
-            this.cell1.push(this.vec.norm().multiply( gap).multiply(coef).multiply(1000).multiply(weight));
-            this.cell2.push(this.vec.norm().multiply(-gap).multiply(coef).multiply(1000).multiply(weight));
+            this.cell1.push(this.vec.norm().multiply( Math.pow(gap, 1.5)).multiply(coef).multiply(20).multiply(weight));
+            this.cell2.push(this.vec.norm().multiply(-Math.pow(gap, 1.5)).multiply(coef).multiply(20).multiply(weight));
         }
     }
 
