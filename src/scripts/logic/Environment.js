@@ -53,6 +53,7 @@ export default class Environment {
         });
         this.connections.forEach((obj)=>{
            obj.stretch(coef);
+           obj.turn(coef);
         });
         return this;
     }

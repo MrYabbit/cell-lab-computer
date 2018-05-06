@@ -4,6 +4,7 @@ import * as cell_config from "../../config/Cell";
 export default class Cell {
     constructor(env, energy) {
         this._position = new Vector(0, 0);
+        this.angle = 0;
         this.env = env;
         this.draw = {
             root: this.env.g.draw.group()
@@ -12,15 +13,18 @@ export default class Cell {
         this.energy = energy;
         if (this.energy < 0) this.energy = Infinity; // if energy is -1 than set it to maximum allowed energy (take a look at "set energy()")
         this.movement = new Vector(0, 0);
+        this.rotation = 0;
         this.connections = [];
 
 
         // here is created graphics appearance of cell
         this.draw.body = this.draw.root.circle(0)
-                                        .center(this.x, this.y)
-                                        .fill(this.config.COLOR_FILL)
-                                        .stroke(this.config.COLOR_STROKE)
-                                        .radius(this.radius);
+            .center(this.x, this.y)
+            .fill(this.config.COLOR_FILL)
+            .stroke(this.config.COLOR_STROKE)
+            .radius(this.radius);
+        this.draw.angle = this.draw.root.line(0, 0, Vector.by_len(this.angle, this.radius*0.75).x, Vector.by_len(this.angle, this.radius*0.75).y).stroke({color: "#00F", width:2});
+
     }
 
     get x() {
@@ -81,6 +85,10 @@ export default class Cell {
         return this;
     }
 
+    spin(angle) {
+        this.rotation += angle/this.weight;
+    }
+
     move (vec) {
         this.position = vec.cp();
         return this;
@@ -139,10 +147,20 @@ export default class Cell {
         if (friction) {
             this.push(this.movement.cp().set_len(-Math.min(friction, this.movement.len)));
         }
+
+        let rotation_friction = this.rotation * this.env.config.VISCOSITY * coef*1000;
+        if (rotation_friction) {
+            if (Math.abs(rotation_friction) > this.rotation) {
+                this.rotation = 0;
+            } else {
+                this.spin(-rotation_friction);
+            }
+        }
     }
 
     apply_movement (coef) {
         this.position.add(this.movement.cp().multiply(coef));
+        this.angle += this.rotation*coef;
         return this;
     }
 
@@ -171,12 +189,16 @@ export default class Cell {
         // this updates svg
         this.draw.root.move(this._position.x, this._position.y);
         this.draw.body.radius(this.radius);
+        this.draw.angle.plot(0, 0, Vector.by_len(this.angle, this.radius*0.75).x, Vector.by_len(this.angle, this.radius*0.75).y);
     }
 
     check_reproduction() {
         if (this.energy > this.config.REPRODUCE_ENERGY) {
-            let child1 = new Cell(this.env, this.energy/2).move(this.position.add({x:1, y:1}));
-            let child2 = new Cell(this.env, this.energy/2).move(this.position.subtract({x:1, y:1}));
+            let child1 = new Cell(this.env, this.energy/2).move(this.position.add({x:1, y:0}));
+            let child2 = new Cell(this.env, this.energy/2).move(this.position.subtract({x:1, y:0}));
+
+            child1.angle = this.angle;
+            child2.angle = this.angle;
 
             this.env.add_cell(child1);
             this.env.add_cell(child2);
