@@ -77,17 +77,17 @@ export default class Cell {
     }
 
     push (vec) {
-        this.movement = this.movement.add(vec.divide(this.weight));
+        this.movement.add(vec.cp().divide(this.weight));
         return this;
     }
 
     move (vec) {
-        this.position = vec;
+        this.position = vec.cp();
         return this;
     }
 
     dmove (vec) {
-        this.move(this.position.add(vec));
+        this.position.add(vec);
         return this;
     }
 
@@ -106,14 +106,14 @@ export default class Cell {
                 continue;
             }
             let cell = cells[i];
-            let diff = this.position.subtract(cell.position); // compute vector from this to cell
+            let diff = this.position.cp().subtract(cell.position); // compute vector from this to cell
             if (diff.len < cell.radius + this.radius && diff.len > 0) { // if it is close enough
                 let overlap = cell.radius + this.radius - diff.len; // how much do cells overlap
 
                 overlap = Math.sqrt(Math.sqrt(overlap+1))-1; // using square root of overlap for more smooth behavior after spawning cell on another
 
-                let move_instantly = diff.norm().multiply(overlap).multiply(20).multiply(coef).multiply(this.weight+cell.weight); // this vector moves cell instantly - to solve spawning cells in middle of others
-                let create_force   = diff.norm().multiply(overlap).multiply(1000).multiply(coef).multiply(this.weight+cell.weight); // this vector represents the force that is caused by collision
+                let move_instantly = diff.cp().norm().multiply(overlap).multiply(20).multiply(coef).multiply(this.weight+cell.weight); // this vector moves cell instantly - to solve spawning cells in middle of others
+                let create_force   = diff.cp().norm().multiply(overlap).multiply(1000).multiply(coef).multiply(this.weight+cell.weight); // this vector represents the force that is caused by collision
 
                 // now apply those two vectors
                 this.dmove(move_instantly);
@@ -126,22 +126,23 @@ export default class Cell {
     }
 
     check_environment_border(coef) {
-        let vec = this.env.center.subtract(this.position);
+        let vec = this.env.center.cp().subtract(this.position);
         let overlap = this.radius + vec.len - this.env.radius;
         if (overlap > 0) {
-            this.push(vec.norm().multiply(overlap).multiply(coef).multiply(10000));
+            vec.norm().multiply(overlap).multiply(coef).multiply(10000);
+            this.push(vec);
         }
     }
 
     apply_friction (coef) {// applies friction
         let friction = this.movement.len*this.movement.len * this.radius * this.env.config.VISCOSITY * coef;
         if (friction) {
-            this.push(this.movement.set_len(-Math.min(friction, this.movement.len)));
+            this.push(this.movement.cp().set_len(-Math.min(friction, this.movement.len)));
         }
     }
 
     apply_movement (coef) {
-        this.position = this.position.add(this.movement.multiply(coef));
+        this.position.add(this.movement.cp().multiply(coef));
         return this;
     }
 
@@ -168,7 +169,7 @@ export default class Cell {
 
     update_graphics() {
         // this updates svg
-        this.draw.root.move(this.x, this.y);
+        this.draw.root.move(this._position.x, this._position.y);
         this.draw.body.radius(this.radius);
     }
 
