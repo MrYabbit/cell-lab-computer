@@ -59,8 +59,8 @@ export default class Connection {
         let force = desired.cp().subtract(now);
         if (Math.abs(d_angle) > 0.1) {
             force.multiply(p);
-            this.cell2.push(force);
-            this.cell1.spin(p * d_angle*5);
+            this.cell2.push(force.divide(1000));
+            this.cell1.spin(p * d_angle*100);
         }
     }
 
@@ -72,8 +72,8 @@ export default class Connection {
         let force = desired.cp().subtract(now);
         if (Math.abs(d_angle) > 0.1) {
             force.multiply(p);
-            this.cell1.push(force);
-            this.cell2.spin(p * d_angle*5);
+            this.cell1.push(force.divide(1000));
+            this.cell2.spin(p * d_angle*100);
         }
     }
 
