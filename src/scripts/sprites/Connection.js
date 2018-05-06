@@ -1,10 +1,12 @@
 import * as config from "../../config";
 import * as connedction_config from "../../config/Connection";
+import Vector from "../utils/Vector";
 
 export default class Connection {
     constructor(cell1, cell2) {
         this.cell1 = cell1;
         this.cell2 = cell2;
+        this.angle = this.cell2.position.cp().subtract(this.cell1.position).angle;
         this.config = connedction_config;
         this.destroyed = false;
         this.draw = {
@@ -41,6 +43,40 @@ export default class Connection {
             this.cell2.push(this.vec.norm().multiply(-Math.pow(gap, 1.5)).multiply(coef).multiply(20).multiply(weight));
         }
     }
+
+    turn(coef) {
+        let weight = this.cell1.weight + this.cell2.weight;
+        let p = coef*5*weight;
+        this.turn_1(p);
+        this.turn_2(p);
+    }
+
+    turn_1(p) {
+        let now = this.vec;
+        let desired = Vector.by_len(this.angle+this.cell1.angle, now.len);
+        let d_angle =  (now.angle - desired.angle+Math.PI*3)%(Math.PI*2)-Math.PI;
+        //if (Math.abs(d_angle)>Math.PI/2) this.label_for_destruction();
+        let force = desired.cp().subtract(now);
+        if (Math.abs(d_angle) > 0.1) {
+            force.multiply(p);
+            this.cell2.push(force);
+            this.cell1.spin(p * d_angle*5);
+        }
+    }
+
+    turn_2(p) {
+        let now = this.vec.multiply(-1);
+        let desired = Vector.by_len(this.angle+this.cell1.angle, now.len).multiply(-1);
+        let d_angle =  (now.angle - desired.angle+Math.PI*3)%(Math.PI*2)-Math.PI;
+        //if (Math.abs(d_angle)>Math.PI/2) this.label_for_destruction();
+        let force = desired.cp().subtract(now);
+        if (Math.abs(d_angle) > 0.1) {
+            force.multiply(p);
+            this.cell1.push(force);
+            this.cell2.spin(p * d_angle*5);
+        }
+    }
+
 
     update_graphics() {
         this.draw.root.move(this.cell1.x, this.cell1.y);
