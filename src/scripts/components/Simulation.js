@@ -18,10 +18,10 @@ export class Simulation extends Component {
     }
 
     tick() {
-        this.env.generate_movement(1/this.config.TPS) // check physics and generates movement
-                .apply_movement(1/this.config.TPS) // moves everything in Environment
-                .apply_friction(1/this.config.TPS) // applies friction of environment
-                .starve(1/this.config.TPS) // makes 'em starve
+        this.env.generate_movement(this.config.APT) // check physics and generates movement
+                .apply_movement(this.config.APT) // moves everything in Environment
+                .apply_friction(this.config.APT) // applies friction of environment
+                .starve(this.config.APT) // makes 'em starve
                 .check_dead() // removes dead cells and destroyed connections
                 .check_reproduction() // let 'em reproduce
                 .update_graphics(); // this updates shown svg
@@ -29,6 +29,6 @@ export class Simulation extends Component {
 
 
     render() {
-        return (<div id="renderer" onClick={this.addCell}/>);
+        return (<div id="renderer"/>);
     }
 }

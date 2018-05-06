@@ -20,7 +20,7 @@ export default class Connection {
 
 
     get vec() {
-        return this.cell2.position.subtract(this.cell1.position)
+        return this.cell2.position.cp().subtract(this.cell1.position)
     }
 
     label_for_destruction() {

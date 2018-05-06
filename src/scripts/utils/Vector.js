@@ -4,31 +4,57 @@ export default class Vector {
         this.y = y;
     }
 
+    static by_coord(x, y) {
+        return new Vector(x, y);
+    }
+
+    static by_len(angle, len) {
+        return new Vector(Math.cos(angle)*len, Math.sin(angle)*len);
+    }
+
+    cp() {
+        return new Vector(this.x, this.y);
+    }
+
     get len() {
         return Math.sqrt(this.x*this.x + this.y*this.y);
     }
 
-    set_len(val) {
-        return this.norm().multiply(val);
+    get angle() {
+        return Math.atan2(this.y, this.x);
     }
 
-    add (vec) {
-        return new Vector(this.x + vec.x, this.y + vec.y);
+    set_len(val: Vector) {
+        this.norm().multiply(val);
+        return this;
     }
 
-    subtract (vec) {
-        return new Vector(this.x - vec.x, this.y - vec.y);
+    add (vec: Vector) {
+        this.x += vec.x;
+        this.y += vec.y;
+        return this;
     }
 
-    multiply (val) {
-        return new Vector(this.x * val, this.y * val);
+    subtract (vec: Vector) {
+        this.x -= vec.x;
+        this.y -= vec.y;
+        return this;
     }
 
-    divide (val) {
-        return new Vector(this.x / val, this.y / val);
+    multiply (val: number) {
+        this.x *= val;
+        this.y *= val;
+        return this;
+    }
+
+    divide (val: number) {
+        this.x /= val;
+        this.y /= val;
+        return this;
     }
 
     norm () {
-        return this.divide(this.len);
+        this.divide(this.len);
+        return this;
     }
 }
