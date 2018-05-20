@@ -13,9 +13,6 @@ export default class Environment {
         this.connections = []; // here will be stored all existing connections
         this.center = new Vector(this.g.parent.offsetWidth/2, this.g.parent.offsetHeight/2);
         this.radius = this.get_radius();
-        this.g.draw.click((e) => { // this is event listener for clicking that will spawn new cells
-            this.add_cell(new Cell(this, config.DEFAULT_CELL_ENERGY).move(new Vector(e.clientX, e.clientY)));
-        });
         this.draw = {
             root: this.g.draw.group(),
         };
@@ -24,6 +21,9 @@ export default class Environment {
             .stroke({
                 color: this.config.BORDER_COLOR,
                 width: this.config.BORDER_WIDTH,
+            })
+            .click((e) => { // this is event listener for clicking that will spawn new cells
+                this.add_cell(new Cell(this, config.DEFAULT_CELL_ENERGY).move(new Vector(e.clientX, e.clientY)));
             });
     }
 
