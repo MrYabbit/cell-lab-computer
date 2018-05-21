@@ -63,8 +63,9 @@ export default class Connection {
         let force = desired.cp().subtract(now);
         if (Math.abs(d_angle) > 0.0001) {
             force.multiply(p);
+            force.set_len(Math.pow(force.len, this.config.PUSH_FORCE_POWER));
             this.cell2.push(force.multiply(this.config.PUSH_FORCE_MULTIPLIER));
-            this.cell1.spin(p * d_angle * this.config.ROTATE_MULTIPLIER);
+            this.cell1.spin(p * Math.pow(Math.abs(d_angle), this.config.ROTATE_POWER) * this.config.ROTATE_MULTIPLIER * d_angle / Math.abs(d_angle));
         }
     }
 
@@ -78,8 +79,9 @@ export default class Connection {
         let force = desired.cp().subtract(now);
         if (Math.abs(d_angle) > 0.0001) {
             force.multiply(p);
+            force.set_len(Math.pow(force.len, this.config.PUSH_FORCE_POWER));
             this.cell1.push(force.multiply(this.config.PUSH_FORCE_MULTIPLIER));
-            this.cell2.spin(p * d_angle * this.config.ROTATE_MULTIPLIER);
+            this.cell2.spin(p * Math.pow(Math.abs(d_angle), this.config.ROTATE_POWER) * this.config.ROTATE_MULTIPLIER * d_angle / Math.abs(d_angle));
         }
     }
 

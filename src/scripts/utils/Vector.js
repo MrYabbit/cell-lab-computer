@@ -24,7 +24,7 @@ export default class Vector {
         return Math.atan2(this.y, this.x);
     }
 
-    set_len(val: Vector) {
+    set_len(val: Number) {
         this.norm().multiply(val);
         return this;
     }

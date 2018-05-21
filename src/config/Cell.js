@@ -15,9 +15,16 @@ export const ANGLE_LINE_COLOR = "#0000FF"; // color of that line
 export const WEIGHT_FROM_ENERGY_CONST = 1/10; // This is the multiplier of energy to get weight
 export const RADIUS_MULTIPLIER = 2; // Radius is computed as Math.sqrt(energy) * RADIUS_MULTIPLIER
 
-export const COLLISION_MOVE_INSTANTLY_MULTIPLIER = 20;
-export const COLLISION_PUSH_MULTIPLIER = 1000;
+export const COLLISION_MOVE_INSTANTLY_MULTIPLIER = 15;
+export const COLLISION_PUSH_FCE = (x) => {
+    if (x < 1) {
+        return x;
+    } else {
+        return x^0.7;
+    }
+};
+export const COLLISION_PUSH_MULTIPLIER = 10000;
 export const BORDER_COLLISION_MULTIPLIER = COLLISION_PUSH_MULTIPLIER;
 
-export const MOVEMENT_FRICTION_COEF = 1;
-export const ROTATION_FRICTION_COEF = 100000;
+export const MOVEMENT_FRICTION_COEF = 1/10;
+export const ROTATION_FRICTION_COEF = 10;

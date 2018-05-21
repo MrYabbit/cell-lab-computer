@@ -128,8 +128,8 @@ export default class Cell {
 
                 overlap = Math.sqrt(Math.sqrt(overlap+1))-1; // using square root of overlap for more smooth behavior after spawning cell on another
 
-                let move_instantly = diff.cp().norm().multiply(overlap).multiply(this.config.COLLISION_MOVE_INSTANTLY_MULTIPLIER).multiply(coef).multiply(this.weight+cell.weight); // this vector moves cell instantly - to solve spawning cells in middle of others
-                let create_force   = diff.cp().norm().multiply(overlap).multiply(this.config.COLLISION_PUSH_MULTIPLIER).multiply(coef).multiply(this.weight+cell.weight); // this vector represents the force that is caused by collision
+                let move_instantly = diff.cp().norm().multiply(this.config.COLLISION_PUSH_FCE(overlap)).multiply(this.config.COLLISION_MOVE_INSTANTLY_MULTIPLIER).multiply(coef).multiply(this.weight+cell.weight); // this vector moves cell instantly - to solve spawning cells in middle of others
+                let create_force   = diff.cp().norm().multiply(this.config.COLLISION_PUSH_FCE(overlap)).multiply(this.config.COLLISION_PUSH_MULTIPLIER).multiply(coef).multiply(this.weight+cell.weight); // this vector represents the force that is caused by collision
 
                 // now apply those two vectors
                 this.dmove(move_instantly);
@@ -208,8 +208,8 @@ export default class Cell {
             child1.angle = (this.angle + this.config.SPLIT_ANGLE) % (2*Math.PI);
             child2.angle = (this.angle + this.config.SPLIT_ANGLE) % (2*Math.PI);
 
-            child1.dmove(Vector.by_len(child1.angle, child1.radius/2));
-            child2.dmove(Vector.by_len(child2.angle,-child2.radius/2));
+            child1.dmove(Vector.by_len(child1.angle, child1.radius));
+            child2.dmove(Vector.by_len(child2.angle,-child2.radius));
 
             this.env.add_cell(child1);
             this.env.add_cell(child2);
