@@ -23,7 +23,7 @@ export const COLLISION_PUSH_FCE = (x) => {
         return x^0.7;
     }
 };
-export const COLLISION_PUSH_MULTIPLIER = 10000;
+export const COLLISION_PUSH_MULTIPLIER = 1000;
 export const BORDER_COLLISION_MULTIPLIER = COLLISION_PUSH_MULTIPLIER;
 
 export const MOVEMENT_FRICTION_COEF = 1/10;
