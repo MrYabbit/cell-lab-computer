@@ -16,7 +16,7 @@ export const WEIGHT_FROM_ENERGY_CONST = 1/10; // This is the multiplier of energ
 export const RADIUS_MULTIPLIER = 2; // Radius is computed as Math.sqrt(energy) * RADIUS_MULTIPLIER
 
 export const COLLISION_MOVE_INSTANTLY_MULTIPLIER = 20;
-export const COLLISION_PUSH_MULTIPLIER = 10000;
+export const COLLISION_PUSH_MULTIPLIER = 1000;
 export const BORDER_COLLISION_MULTIPLIER = COLLISION_PUSH_MULTIPLIER;
 
 export const MOVEMENT_FRICTION_COEF = 1;

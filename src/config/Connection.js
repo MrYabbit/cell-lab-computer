@@ -9,4 +9,6 @@ export const STRETCH_MULTIPLIER = 20;
 
 // Forces for rotating and moving cells will be computed using those:
 export const PUSH_FORCE_MULTIPLIER = 1/1000; // Moving will be multiplied by this
-export const ROTATE_MULTIPLIER = 1000; // Rotation will be multiplied by this
+export const ROTATE_MULTIPLIER = 100; // Rotation will be multiplied by this
+
+export const MAX_ANGLE_DIFFERENCE = Math.PI*2;
