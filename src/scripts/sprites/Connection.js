@@ -56,7 +56,9 @@ export default class Connection {
         let desired = Vector.by_len(this.angle+this.cell1.angle, now.len);
         let d_angle =  (now.angle - desired.angle+Math.PI*7)%(Math.PI*2)-Math.PI;
 
-        if (Math.abs(d_angle)>this.config.MAX_ANGLE_DIFFERENCE) this.label_for_destruction();
+        if (Math.abs(d_angle)>this.config.MAX_ANGLE_DIFFERENCE) {
+            this.label_for_destruction();
+        }
 
         let force = desired.cp().subtract(now);
         if (Math.abs(d_angle) > 0.0001) {
