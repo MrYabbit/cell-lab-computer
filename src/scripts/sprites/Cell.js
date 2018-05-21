@@ -1,5 +1,6 @@
 import Vector from "../utils/Vector";
 import * as cell_config from "../../config/Cell";
+import {MOVEMENT_FRICTION_COEF} from "../../config/Cell";
 
 export default class Cell {
     constructor(env, energy) {
@@ -30,7 +31,7 @@ export default class Cell {
                     console.log(`This connection should be on ${this.connections[i].angle} but its on ${this.connections[i].cell2.position.cp().subtract(this.connections[i].cell1.position).angle}`);
                 }
             });
-        this.draw.angle = this.draw.root.line(0, 0, Vector.by_len(this.angle, this.radius*0.75).x, Vector.by_len(this.angle, this.radius*0.75).y).stroke({color: "#00F", width:2});
+        this.draw.angle = this.draw.root.line(0, 0, Vector.by_len(this.angle, this.radius*this.config.ANGLE_LINE_LEN).x, Vector.by_len(this.angle, this.radius*this.config.ANGLE_LINE_LEN).y).stroke({color: this.config.ANGLE_LINE_COLOR, width:this.config.ANGLE_LINE_WIDTH});
 
     }
 
@@ -68,11 +69,11 @@ export default class Cell {
     }
 
     get weight () {
-        return this.energy/10;
+        return this.energy*this.config.WEIGHT_FROM_ENERGY_CONST;
     }
 
     get radius () {
-        return Math.sqrt(this.energy)*2;
+        return Math.sqrt(this.energy)*this.config.RADIUS_MULTIPLIER;
     }
 
     add_connection (conn) {
@@ -127,8 +128,8 @@ export default class Cell {
 
                 overlap = Math.sqrt(Math.sqrt(overlap+1))-1; // using square root of overlap for more smooth behavior after spawning cell on another
 
-                let move_instantly = diff.cp().norm().multiply(overlap).multiply(20).multiply(coef).multiply(this.weight+cell.weight); // this vector moves cell instantly - to solve spawning cells in middle of others
-                let create_force   = diff.cp().norm().multiply(overlap).multiply(1000).multiply(coef).multiply(this.weight+cell.weight); // this vector represents the force that is caused by collision
+                let move_instantly = diff.cp().norm().multiply(overlap).multiply(this.config.COLLISION_MOVE_INSTANTLY_MULTIPLIER).multiply(coef).multiply(this.weight+cell.weight); // this vector moves cell instantly - to solve spawning cells in middle of others
+                let create_force   = diff.cp().norm().multiply(overlap).multiply(this.config.COLLISION_PUSH_MULTIPLIER).multiply(coef).multiply(this.weight+cell.weight); // this vector represents the force that is caused by collision
 
                 // now apply those two vectors
                 this.dmove(move_instantly);
@@ -144,18 +145,18 @@ export default class Cell {
         let vec = this.env.center.cp().subtract(this.position);
         let overlap = this.radius + vec.len - this.env.radius;
         if (overlap > 0) {
-            vec.norm().multiply(overlap).multiply(coef).multiply(10000);
+            vec.norm().multiply(overlap).multiply(coef).multiply(this.config.BORDER_COLLISION_MULTIPLIER);
             this.push(vec);
         }
     }
 
     apply_friction (coef) {// applies friction
-        let friction = this.movement.len*this.movement.len * this.radius * this.env.config.VISCOSITY * coef;
+        let friction = this.movement.len*this.movement.len * this.radius * this.env.config.VISCOSITY * coef * this.config.MOVEMENT_FRICTION_COEF;
         if (friction) {
             this.push(this.movement.cp().set_len(-Math.min(friction, this.movement.len)));
         }
 
-        let rotation_friction = this.rotation * this.rotation * this.env.config.VISCOSITY * coef*100000;
+        let rotation_friction = this.rotation * this.rotation * this.env.config.VISCOSITY * coef*this.config.ROTATION_FRICTION_COEF;
         if (rotation_friction) {
             if (Math.abs(rotation_friction) > this.rotation) {
                 this.rotation = 0;
@@ -172,7 +173,7 @@ export default class Cell {
     }
 
     starve (coef) {
-        this.energy -= coef*this.config.STARVE_RATE*Math.sqrt(this.energy/100);
+        this.energy -= coef*this.config.STARVE_RATE*Math.sqrt(this.energy);
         return this;
     }
 
@@ -231,7 +232,7 @@ export default class Cell {
         }
     }
 
-    sunbath(coef) {
+    sunbath(coef) { // this whole function is just for debugging purposes, system of growing will be different (thats why there are magic numbers and everything)
         let light = this.position.y - this.env.g.parent.offsetHeight*0.8;
         if (light > 0) {
             light /= this.env.g.parent.offsetHeight*0.2;

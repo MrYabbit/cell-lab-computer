@@ -39,14 +39,14 @@ export default class Connection {
             this.label_for_destruction();
         } else if (gap > 0) {
             let weight = this.cell1.weight + this.cell2.weight;
-            this.cell1.push(this.vec.norm().multiply( Math.pow(gap, 1.5)).multiply(coef).multiply(20).multiply(weight));
-            this.cell2.push(this.vec.norm().multiply(-Math.pow(gap, 1.5)).multiply(coef).multiply(20).multiply(weight));
+            this.cell1.push(this.vec.norm().multiply( Math.pow(gap, this.config.STRETCH_GAP_POWER)).multiply(coef).multiply(this.config.STRETCH_MULTIPLIER).multiply(weight));
+            this.cell2.push(this.vec.norm().multiply(-Math.pow(gap, this.config.STRETCH_GAP_POWER)).multiply(coef).multiply(this.config.STRETCH_MULTIPLIER).multiply(weight));
         }
     }
 
     turn(coef) {
         let weight = this.cell1.weight + this.cell2.weight;
-        let p = coef*5*weight;
+        let p = coef*weight;
         this.turn_1(p);
         this.turn_2(p);
     }
@@ -57,10 +57,10 @@ export default class Connection {
         let d_angle =  (now.angle - desired.angle+Math.PI*7)%(Math.PI*2)-Math.PI;
         //if (Math.abs(d_angle)>Math.PI/2) this.label_for_destruction();
         let force = desired.cp().subtract(now);
-        if (Math.abs(d_angle) > 0.1) {
+        if (Math.abs(d_angle) > 0.0001) {
             force.multiply(p);
-            this.cell2.push(force.divide(1000));
-            this.cell1.spin(p * d_angle * 10);
+            this.cell2.push(force.multiply(this.config.PUSH_FORCE_MULTIPLIER));
+            this.cell1.spin(p * d_angle * this.config.ROTATE_MULTIPLIER);
         }
     }
 
@@ -70,10 +70,10 @@ export default class Connection {
         let d_angle =  (now.angle - desired.angle+Math.PI*7)%(Math.PI*2)-Math.PI;
         //if (Math.abs(d_angle)>Math.PI/2) this.label_for_destruction();
         let force = desired.cp().subtract(now);
-        if (Math.abs(d_angle) > 0.1) {
+        if (Math.abs(d_angle) > 0.0001) {
             force.multiply(p);
-            this.cell1.push(force.divide(1000));
-            this.cell2.spin(p * d_angle * 10);
+            this.cell1.push(force.multiply(this.config.PUSH_FORCE_MULTIPLIER));
+            this.cell2.spin(p * d_angle * this.config.ROTATE_MULTIPLIER);
         }
     }
 
