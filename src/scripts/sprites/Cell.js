@@ -22,7 +22,14 @@ export default class Cell {
             .center(this.x, this.y)
             .fill(this.config.COLOR_FILL)
             .stroke(this.config.COLOR_STROKE)
-            .radius(this.radius);
+            .radius(this.radius)
+            .click((e) => {
+                console.log(`Clicked on cell with this rotation: ${this.rotation}`);
+                console.log("This cell is connected with these connections");
+                for (let i = 0; i < this.connections.length; ++i) {
+                    console.log(`This connection should be on ${this.connections[i].angle} but its on ${this.connections[i].cell2.position.cp().subtract(this.connections[i].cell1.position).angle}`);
+                }
+            });
         this.draw.angle = this.draw.root.line(0, 0, Vector.by_len(this.angle, this.radius*0.75).x, Vector.by_len(this.angle, this.radius*0.75).y).stroke({color: "#00F", width:2});
 
     }
@@ -148,7 +155,7 @@ export default class Cell {
             this.push(this.movement.cp().set_len(-Math.min(friction, this.movement.len)));
         }
 
-        let rotation_friction = this.rotation * this.env.config.VISCOSITY * coef*1000;
+        let rotation_friction = this.rotation * this.rotation * this.env.config.VISCOSITY * coef*100000;
         if (rotation_friction) {
             if (Math.abs(rotation_friction) > this.rotation) {
                 this.rotation = 0;
@@ -194,11 +201,14 @@ export default class Cell {
 
     check_reproduction() {
         if (this.energy > this.config.REPRODUCE_ENERGY) {
-            let child1 = new Cell(this.env, this.energy/2).move(this.position.add({x:1, y:0}));
-            let child2 = new Cell(this.env, this.energy/2).move(this.position.subtract({x:1, y:0}));
+            let child1 = new Cell(this.env, this.energy/2).move(this.position);
+            let child2 = new Cell(this.env, this.energy/2).move(this.position);
 
-            child1.angle = this.angle;
-            child2.angle = this.angle;
+            child1.angle = (this.angle + this.config.SPLIT_ANGLE) % (2*Math.PI);
+            child2.angle = (this.angle + this.config.SPLIT_ANGLE) % (2*Math.PI);
+
+            child1.dmove(Vector.by_len(child1.angle, child1.radius/2));
+            child2.dmove(Vector.by_len(child2.angle,-child2.radius/2));
 
             this.env.add_cell(child1);
             this.env.add_cell(child2);
