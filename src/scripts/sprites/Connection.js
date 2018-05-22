@@ -6,7 +6,8 @@ export default class Connection {
     constructor(cell1, cell2) {
         this.cell1 = cell1;
         this.cell2 = cell2;
-        this.angle = this.cell2.position.cp().subtract(this.cell1.position).angle - this.cell1.angle;
+        this.angle1 = this.cell2.position.cp().subtract(this.cell1.position).angle - this.cell1.angle;
+        this.angle2 = this.cell1.position.cp().subtract(this.cell2.position).angle - this.cell2.angle;
         this.config = connedction_config;
         this.destroyed = false;
         this.draw = {
@@ -53,8 +54,8 @@ export default class Connection {
 
     turn_1(p) {
         let now = this.vec;
-        let desired = Vector.by_len(this.angle+this.cell1.angle, now.len);
-        let d_angle =  (now.angle - desired.angle+Math.PI*7)%(Math.PI*2)-Math.PI;
+        let desired = Vector.by_len(this.angle1+this.cell1.angle, now.len);
+        let d_angle =  (desired.angle - now.angle + Math.PI*7)%(Math.PI*2)-Math.PI;
 
         if (Math.abs(d_angle)>this.config.MAX_ANGLE_DIFFERENCE) {
             this.label_for_destruction();
@@ -65,14 +66,14 @@ export default class Connection {
             force.multiply(p);
             force.set_len(Math.pow(force.len, this.config.PUSH_FORCE_POWER));
             this.cell2.push(force.multiply(this.config.PUSH_FORCE_MULTIPLIER));
-            this.cell1.spin(p * Math.pow(Math.abs(d_angle), this.config.ROTATE_POWER) * this.config.ROTATE_MULTIPLIER * d_angle / Math.abs(d_angle));
+            this.cell1.spin(- p * Math.pow(Math.abs(d_angle), this.config.ROTATE_POWER) * this.config.ROTATE_MULTIPLIER * d_angle / Math.abs(d_angle));
         }
     }
 
     turn_2(p) {
         let now = this.vec.multiply(-1);
-        let desired = Vector.by_len(this.angle+this.cell1.angle, now.len).multiply(-1);
-        let d_angle =  (now.angle - desired.angle+Math.PI*7)%(Math.PI*2)-Math.PI;
+        let desired = Vector.by_len(this.angle2+this.cell2.angle, now.len);
+        let d_angle =  (desired.angle - now.angle + Math.PI*7)%(Math.PI*2)-Math.PI;
 
         if (Math.abs(d_angle)>this.config.MAX_ANGLE_DIFFERENCE) this.label_for_destruction();
 
@@ -81,10 +82,9 @@ export default class Connection {
             force.multiply(p);
             force.set_len(Math.pow(force.len, this.config.PUSH_FORCE_POWER));
             this.cell1.push(force.multiply(this.config.PUSH_FORCE_MULTIPLIER));
-            this.cell2.spin(p * Math.pow(Math.abs(d_angle), this.config.ROTATE_POWER) * this.config.ROTATE_MULTIPLIER * d_angle / Math.abs(d_angle));
+            this.cell2.spin(- p * Math.pow(Math.abs(d_angle), this.config.ROTATE_POWER) * this.config.ROTATE_MULTIPLIER * d_angle / Math.abs(d_angle));
         }
     }
-
 
     update_graphics() {
         this.draw.root.move(this.cell1.x, this.cell1.y);
